@@ -261,6 +261,17 @@ Set redis host
 {{- end -}}
 
 {{/*
+Set redis host
+*/}}
+{{- define "sentry.redis.scheme" -}}
+{{- if .Values.redis.enabled -}}
+{{- default "redis" .Values.redis.scheme }}
+{{- else -}}
+{{ required "A valid .Values.externalRedis.scheme is required" .Values.externalRedis.scheme }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Set redis secret
 */}}
 {{- define "sentry.redis.secret" -}}
@@ -454,6 +465,8 @@ Common Snuba environment variables
   value: /etc/snuba/settings.py
 - name: DEFAULT_BROKERS
   value: {{ include "sentry.kafka.bootstrap_servers_string" . | quote }}
+- name: REDIS_SSL
+  value: "True"
 {{- if .Values.externalClickhouse.existingSecret }}
 - name: CLICKHOUSE_PASSWORD
   valueFrom:
@@ -620,7 +633,7 @@ Common Sentry environment variables
   valueFrom:
     secretKeyRef:
       name: {{ .Values.discord.existingSecret }}
-      key: {{ default "bot-token" .Values.slack.existingSecretBotToken }}      
+      key: {{ default "bot-token" .Values.slack.existingSecretBotToken }}
 {{- end }}
 {{- if and .Values.github.existingSecret }}
 - name: GITHUB_APP_PRIVATE_KEY

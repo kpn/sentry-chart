@@ -2,6 +2,7 @@
 {{- $redisHost := include "sentry.redis.host" . -}}
 {{- $redisPort := include "sentry.redis.port" . -}}
 {{- $redisPass := include "sentry.redis.password" . -}}
+{{- $redisScheme := include "sentry.redis.scheme" . -}}
 config.yml: |-
   relay:
     {{- if .Values.relay.mode }}
@@ -28,9 +29,9 @@ config.yml: |-
         value: 50000000  # 50MB or bust
 
     {{- if $redisPass }}
-    redis: "redis://:{{ $redisPass }}@{{ $redisHost }}:{{ $redisPort }}"
+    redis: "{{ $redisScheme }}://:{{ $redisPass }}@{{ $redisHost }}:{{ $redisPort }}"
     {{- else }}
-    redis: "redis://{{ $redisHost }}:{{ $redisPort }}"
+    redis: "{{ $redisScheme }}://{{ $redisHost }}:{{ $redisPort }}"
     {{- end }}
     topics:
       metrics_sessions: ingest-metrics
