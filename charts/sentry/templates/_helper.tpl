@@ -261,6 +261,17 @@ Set redis host
 {{- end -}}
 
 {{/*
+Set redis host
+*/}}
+{{- define "sentry.redis.scheme" -}}
+{{- if .Values.redis.enabled -}}
+{{- default "redis" .Values.redis.scheme }}
+{{- else -}}
+{{ required "A valid .Values.externalRedis.scheme is required" .Values.externalRedis.scheme }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Set redis secret
 */}}
 {{- define "sentry.redis.secret" -}}

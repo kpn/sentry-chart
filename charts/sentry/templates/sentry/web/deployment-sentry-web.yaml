@@ -11,7 +11,7 @@ metadata:
 spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   strategy:
-    type: {{ .Values.sentry.web.strategyType }}
+    type: Recreate
   selector:
     matchLabels:
         app: {{ template "sentry.fullname" . }}
