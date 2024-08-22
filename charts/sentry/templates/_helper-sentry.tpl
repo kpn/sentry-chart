@@ -2,6 +2,7 @@
 {{- $redisHost := include "sentry.redis.host" . -}}
 {{- $redisPort := include "sentry.redis.port" . -}}
 {{- $redisPass := include "sentry.redis.password" . -}}
+{{- $redisScheme := include "sentry.redis.scheme" . -}}
 config.yml: |-
   {{- if .Values.system.adminEmail }}
   system.admin-email: {{ .Values.system.adminEmail | quote }}
@@ -182,9 +183,9 @@ sentry.conf.py: |-
   {{- if or (.Values.rabbitmq.enabled) (.Values.rabbitmq.host) }}
   BROKER_URL = os.environ.get("BROKER_URL", "amqp://{{ .Values.rabbitmq.auth.username }}:{{ .Values.rabbitmq.auth.password }}@{{ template "sentry.rabbitmq.host" . }}:5672/{{ .Values.rabbitmq.vhost }}")
   {{- else if $redisPass }}
-  BROKER_URL = os.environ.get("BROKER_URL", "redis://:{{ $redisPass }}@{{ $redisHost }}:{{ $redisPort }}/0")
+  BROKER_URL = os.environ.get("BROKER_URL", "{{ $redisScheme }}://:{{ $redisPass }}@{{ $redisHost }}:{{ $redisPort }}/0")
   {{- else }}
-  BROKER_URL = os.environ.get("BROKER_URL", "redis://{{ $redisHost }}:{{ $redisPort }}/0")
+  BROKER_URL = os.environ.get("BROKER_URL", "{{ $redisScheme }}://{{ $redisHost }}:{{ $redisPort }}/0")
   {{- end }}
 
   #########
