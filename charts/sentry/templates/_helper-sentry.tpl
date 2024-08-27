@@ -83,6 +83,9 @@ config.yml: |-
           {{- if $redisPass }}
           password: {{ $redisPass | quote }}
           {{- end }}
+          {{- if eq $redisScheme 'rediss' }}
+          ssl: true
+          {{- end }}
 
   ################
   # File storage #
