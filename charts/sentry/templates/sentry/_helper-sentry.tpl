@@ -75,7 +75,18 @@ config.yml: |-
   #########
   # Redis #
   #########
-  # This is configured in the sentry.conf.py as that has support for environment variables.
+  redis.clusters:
+    default:
+      hosts:
+        0:
+          host: {{ $redisHost | quote }}
+          port: {{ $redisPort }}
+          {{- if $redisPass }}
+          password: {{ $redisPass | quote }}
+          {{- end }}
+          {{- if eq $redisScheme 'rediss' }}
+          ssl: true
+          {{- end }}
 
   ################
   # File storage #
