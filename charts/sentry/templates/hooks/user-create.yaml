@@ -77,7 +77,7 @@ spec:
         args:
           - |
             set -e
-            emails = ({{ join " " .Values.user.emails }})
+            emails=({{ join " " .Values.user.emails }})
             for email in "${emails[@]}"; do
                 sentry createuser --no-input --superuser --email "$email" --no-password --force-update;
             done
