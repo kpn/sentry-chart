@@ -87,7 +87,8 @@ spec:
               --no-input \
               --superuser \
               --email "{{ .Values.user.email }}" \
-              --password "$ADMIN_PASSWORD" || true; \
+              --password "$ADMIN_PASSWORD"
+              --force-update || true; \
             if [ $? -eq 0 ] || [ $? -eq 3 ]; then \
               exit 0; \
             else \
